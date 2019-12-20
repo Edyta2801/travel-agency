@@ -2,6 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { AnimatedSwitch } from 'react-router-transition';
+import styles from './App.scss';
 
 import MainLayout from './components/layout/MainLayout/MainLayout';
 
@@ -40,16 +42,28 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <MainLayout>
-          <Switch location={location}>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/trips' component={Trips} />
-            <Route exact path='/countries' component={Countries} />
-            <Route exact path='/regions' component={Regions} />
-            <Route exact path='/trip/:id' component={Trip}/>
-            <Route exact path="/country/:id" component={Country} />
-            <Route exact path='/info' component={Info} />
-            <Route path='*' component={NotFound} />
-          </Switch>
+          <AnimatedSwitch
+            location={location}
+            atEnter={{ opacity: 0, offset: 200 }}
+            atLeave={{ opacity: 0 }}
+            atActive={{ opacity: 1, offset: 0 }}
+            className={styles.switchWrapper}
+            mapStyles={styles => ({
+              opacity: styles.opacity,
+              transform: `translateY(${styles.offset}px)`,
+            })}
+          >
+            <Switch location={location}>
+              <Route exact path='/' component={Home} />
+              <Route exact path='/trips' component={Trips} />
+              <Route exact path='/countries' component={Countries} />
+              <Route exact path='/regions' component={Regions} />
+              <Route exact path='/trip/:id' component={Trip}/>
+              <Route exact path="/country/:id" component={Country} />
+              <Route exact path='/info' component={Info} />
+              <Route path='*' component={NotFound} />
+            </Switch>
+          </AnimatedSwitch>
         </MainLayout>
       </BrowserRouter>
     );
